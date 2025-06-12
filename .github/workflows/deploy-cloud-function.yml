@@ -8,17 +8,17 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout source code
         uses: actions/checkout@v3
 
-      - name: Setup gcloud CLI
-        uses: google-github-actions/setup-gcloud@v2
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
         with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GOOGLE_CREDENTIALS }}
+          credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
 
-      - name: Deploy to Cloud Functions
+      - name: Deploy to Google Cloud Functions
         uses: google-github-actions/deploy-cloud-functions@v2
         with:
           name: square-numbers
@@ -26,3 +26,4 @@ jobs:
           entry_point: square_numbers
           source_dir: .
           region: us-central1
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
