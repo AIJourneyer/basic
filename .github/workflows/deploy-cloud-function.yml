@@ -1,4 +1,4 @@
-name: Deploy to Google Cloud Functions
+name: Deploy to Google Cloud Functions (2nd Gen)
 
 on:
   push:
@@ -18,12 +18,13 @@ jobs:
         with:
           credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
 
-      - name: Deploy to Google Cloud Functions
-        uses: google-github-actions/deploy-cloud-functions@v2
-        with:
-          name: square-numbers
-          runtime: python310
-          entry_point: square_numbers
-          source_dir: .
-          region: us-central1
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
+      - name: Deploy to Cloud Functions (2nd Gen)
+        run: |
+          gcloud functions deploy square-numbers \
+            --gen2 \
+            --runtime=python310 \
+            --region=us-central1 \
+            --entry-point=square_numbers \
+            --trigger-http \
+            --allow-unauthenticated \
+            --project=${{ secrets.GCP_PROJECT_ID }}
