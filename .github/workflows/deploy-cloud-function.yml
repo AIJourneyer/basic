@@ -1,0 +1,24 @@
+name: Deploy to Google Cloud Functions
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to Cloud Functions
+        uses: google-github-actions/deploy-cloud-functions@v0.1.0
+        with:
+          name: square-numbers
+          runtime: python310
+          entryPoint: square_numbers
+          source: ./
+          project: ${{ secrets.GCP_PROJECT_ID }}
+          credentials: ${{ secrets.GOOGLE_CREDENTIALS }}
+          region: us-central1
